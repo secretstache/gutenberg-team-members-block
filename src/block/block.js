@@ -1,5 +1,5 @@
 /**
- * BLOCK: team-members
+ * BLOCK: Team Member
  *
  * Registering a basic block with Gutenberg.
  * Simple block, renders and saves the same content without any interactivity.
@@ -8,9 +8,14 @@
 //  Import CSS.
 import './style.scss';
 import './editor.scss';
+import classnames from 'classnames';
+import icons from './icons.js';
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.blocks
+const { RichText, PlainText, BlockControls, InspectorControls, MediaUpload } = wp.editor; // Import components from wp.editor
+const { Toolbar, Button, IconButton, Tooltip, PanelBody, PanelRow, FormToggle } = wp.components; // Import components from wp.components
+
 
 /**
  * Register: aa Gutenberg Block.
@@ -27,14 +32,25 @@ const { registerBlockType } = wp.blocks; // Import registerBlockType() from wp.b
  */
 registerBlockType( 'cgb/block-team-members', {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'team-members - CGB Block' ), // Block title.
-	icon: 'shield', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
+	title: __( 'Team Members' ), // Block title.
+	icon: 'groups', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
-		__( 'team-members — CGB Block' ),
-		__( 'CGB Example' ),
-		__( 'create-guten-block' ),
+		__( 'Team Members' ),
+		__( 'Gutenberg Block' ),
+		__( 'Secret Stache Media' ),
 	],
+
+	attributes: {
+		sliderMode: {
+			type: 'boolean',
+			default: true
+		},
+		gridMode: {
+			type: 'boolean',
+			default: false
+		}
+	},
 
 	/**
 	 * The edit function describes the structure of your block in the context of the editor.
@@ -45,21 +61,75 @@ registerBlockType( 'cgb/block-team-members', {
 	 * @link https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
 	 */
 	edit: function( props ) {
-		// Creates a <p class='wp-block-cgb-block-team-members'></p>.
+
+		var sliderMode = props.attributes.sliderMode;
+		var gridMode = props.attributes.gridMode;
+
+		function toggleMode() {
+			if (sliderMode) {
+				props.setAttributes( { sliderMode: false } )
+				props.setAttributes( { gridMode: true } )
+			} else {
+				props.setAttributes( { sliderMode: true } )
+				props.setAttributes( { gridMode: false } )
+			}
+		}
+
 		return (
-			<div className={ props.className }>
-				<p>— Hello from the backend.</p>
-				<p>
-					CGB BLOCK: <code>team-members</code> is a new Gutenberg block
-				</p>
-				<p>
-					It was created via{ ' ' }
-					<code>
-						<a href="https://github.com/ahmadawais/create-guten-block">
-							create-guten-block
-						</a>
-					</code>.
-				</p>
+			<div className="main">
+				<BlockControls key="controls">
+					<Toolbar>
+						<Tooltip text={ __( 'Enable Slider Mode' )  }>
+							<Button className={ classnames(
+								'components-icon-button',
+								'components-toolbar-control',
+								{ 'active': sliderMode },
+							) }
+							onClick={ toggleMode }
+							>
+							{icons.sliderMode}
+							</Button>
+						</Tooltip>
+						<Tooltip text={ __( 'Enable Grid Mode' )  }>
+							<Button className={ classnames(
+								'components-icon-button',
+								'components-toolbar-control',
+								{ 'active': gridMode },
+							) }
+							onClick={ toggleMode }
+							>
+							{icons.gridMode}
+							</Button>
+						</Tooltip>
+					</Toolbar>
+				</BlockControls>
+
+				<InspectorControls>
+					<PanelBody
+						title={ __( 'Basic' ) }
+					>
+
+						<PanelRow>
+							<label
+								htmlFor="mode-form-toggle"
+							>
+								{ __( 'Slider Mode' ) }
+							</label>
+							<FormToggle
+								id="mode-form-toggle"
+								label={ __( 'Mode') }
+								checked={ gridMode }
+								onChange={ toggleMode }
+							/>
+							<label
+								htmlFor="mode-form-toggle"
+							>
+								{ __( '  Grid Mode' ) }
+							</label>
+						</PanelRow>
+						
+					</PanelBody>
+				</InspectorControls>
 			</div>
 		);
 	},

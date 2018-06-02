@@ -1,15 +1,10 @@
 <?php
 /**
- * Plugin Name: team-members — CGB Gutenberg Block Plugin
- * Plugin URI: https://github.com/ahmadawais/create-guten-block/
- * Description: team-members — is a Gutenberg plugin created via create-guten-block.
- * Author: mrahmadawais, maedahbatool
- * Author URI: https://AhmadAwais.com/
+ * Plugin Name: Gutenberg Team Members Block
+ * Description: Gutenberg plugin that adds support of Team Members block (created via create-guten-block).
+ * Author: Secret Stache Media, LLC
+ * Author URI: https://secretstache.com/
  * Version: 1.0.0
- * License: GPL2+
- * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
- *
- * @package CGB
  */
 
 // Exit if accessed directly.
